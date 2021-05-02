@@ -7,6 +7,7 @@ bullets_generation_tick = 30
 
 
 function love.load()
+
     love.graphics.setNewFont(30)
     levelManager.loadStartLevel()
     player.image = love.graphics.newImage('images/player.png')
@@ -14,27 +15,35 @@ function love.load()
     music = love.audio.newSource('sounds/music.mp3', 'static')
     player_shoot_sound = love.audio.newSource('sounds/shoot.mp3', 'static')
     music:setLooping(true)
---    love.audio.play(music)
+    --    love.audio.play(music)
 end
 
 function love.draw()
-    levelManager.draw()
-    love.graphics.print(score, 5, 5)
-    love.graphics.setColor(1, 1, 1)
-    for it, bullet in pairs(bullets) do
-        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
+    levelManager:draw()
+--    love.graphics.print(score, 5, 5)
+--    love.graphics.setColor(1, 1, 1)
+--    for it, bullet in pairs(bullets) do
+--        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
+--    end
+--    love.graphics.draw(player.image, player.x, (love.graphics.getHeight() * 0.95), 0, 0.3)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    if key == "escape" or key == "q" then
+        love.event.quit()
     end
-    love.graphics.draw(player.image, player.x, (love.graphics.getHeight() * 0.95), 0, 0.3)
+    if isMainMenu == true then
+        currentLevel:handleInput(key)
+    end
 end
 
 function love.update()
-    if levelManager.isMainMenu == true then
-        print("MainManu")
+        --        if table.getn(enemies_list) == 0 then
+        --            levelManager.nextLevel()
+        --        end
+    if isMainMenu == true then
+        currentLevel:handleInput(key)
     else
---        if table.getn(enemies_list) == 0 then
---            levelManager.nextLevel()
---        end
-
         if love.keyboard.isDown('right') then
             if player.x > 750 then
                 player.x = 750

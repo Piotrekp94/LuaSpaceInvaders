@@ -10,6 +10,6 @@ end
 
 
 function levelManager:draw()
-    currentLevel.draw()
+    currentLevel:draw()
 end
 
