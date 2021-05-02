@@ -10,7 +10,6 @@ function mainMenuLevel:new(o)
 end
 
 function mainMenuLevel:handleInput(key)
-    print(":)")
     if key == 'up' and self.position > 0  then
         self.position = self.position - 1
     end
@@ -19,6 +18,12 @@ function mainMenuLevel:handleInput(key)
         self.position = self.position + 1
     end
 
+    if key == 'return' and self.position == 0 then
+        self.isFinished = true
+    end
+    if key == 'return' and self.position == 2 then
+        love.event.quit()
+    end
 end
 
 function mainMenuLevel:draw()

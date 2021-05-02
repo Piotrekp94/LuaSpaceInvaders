@@ -38,9 +38,9 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 function love.update()
-        --        if table.getn(enemies_list) == 0 then
-        --            levelManager.nextLevel()
-        --        end
+    if currentLevel:isFinished == True then
+        levelManager.loadNextLevel()
+    end
     if isMainMenu == true then
         currentLevel:handleInput(key)
     else

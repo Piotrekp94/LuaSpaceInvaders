@@ -6,6 +6,7 @@ function level:new (o)
     setmetatable(o, self)
     self.__index = self
     self.enemiesList = {}
+    self.isFinished = false
     return o
 end
 
