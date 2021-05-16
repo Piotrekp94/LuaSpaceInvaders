@@ -1,5 +1,5 @@
 require("player")
-require("enemies")
+require("enemy")
 require("levelManager")
 score = 0
 bullets = {}
@@ -22,9 +22,7 @@ function love.draw()
     levelManager:draw()
 --    love.graphics.print(score, 5, 5)
 --    love.graphics.setColor(1, 1, 1)
---    for it, bullet in pairs(bullets) do
---        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
---    end
+
 --    love.graphics.draw(player.image, player.x, (love.graphics.getHeight() * 0.95), 0, 0.3)
 end
 
@@ -32,41 +30,31 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "escape" or key == "q" then
         love.event.quit()
     end
-    if isMainMenu == true then
-        currentLevel:handleInput(key)
-    end
 end
 
 function love.update()
-    if currentLevel:isFinished == True then
-        levelManager.loadNextLevel()
+    if love.keyboard.isDown('right') then
+        if player.x > 750 then
+            player.x = 750
+        end
+        player.x = player.x + 5
     end
-    if isMainMenu == true then
-        currentLevel:handleInput(key)
-    else
-        if love.keyboard.isDown('right') then
-            if player.x > 750 then
-                player.x = 750
-            end
-            player.x = player.x + 5
+    if love.keyboard.isDown('left') then
+        if player.x < 10 then
+            player.x = 10
         end
-        if love.keyboard.isDown('left') then
-            if player.x < 10 then
-                player.x = 10
-            end
-            player.x = player.x - 5
-        end
-        if love.keyboard.isDown('space') then
-            player.shoot()
-        end
-        if love.keyboard.isDown('q') then
-            love.event.quit()
-        end
-
-        for it, bullet in pairs(bullets) do
-            bullet.y = bullet.y - 5
-        end
-
-        bullets_generation_tick = bullets_generation_tick - 1
+        player.x = player.x - 5
     end
+    if love.keyboard.isDown('space') then
+        player.shoot()
+    end
+    if love.keyboard.isDown('q') then
+        love.event.quit()
+    end
+
+    for it, bullet in pairs(bullets) do
+        bullet.y = bullet.y - 5
+    end
+
+    bullets_generation_tick = bullets_generation_tick - 1
 end

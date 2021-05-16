@@ -1,5 +1,5 @@
-require("enemies")
-require("mainMenuLevel")
+require("enemy")
+require("gameLevel")
 
 levelManager = {}
 isMainMenu = false
@@ -7,7 +7,7 @@ currentLevel = {}
 
 function levelManager:loadStartLevel()
     isMainMenu = true
-    currentLevel = mainMenuLevel:new{}
+    currentLevel = gameLevel:new{}
 end
 
 function levelManager:loadNextLevel()
