@@ -20,3 +20,6 @@ function levelManager:draw()
     currentLevel:draw()
 end
 
+function levelManager:tick()
+    currentLevel:tick()
+end

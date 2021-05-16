@@ -56,5 +56,8 @@ function love.update()
         bullet.y = bullet.y - 5
     end
 
+    levelManager.tick()
+
+
     bullets_generation_tick = bullets_generation_tick - 1
 end

@@ -1,6 +1,6 @@
 player = {}
 player.x = 100
-player.y = 100
+player.y = love.graphics.getHeight() * 0.95
 
 function player:shoot()
     if bullets_generation_tick <= 0 then
