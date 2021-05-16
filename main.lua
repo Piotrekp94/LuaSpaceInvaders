@@ -1,10 +1,7 @@
 require("player")
-require("enemy")
 require("levelManager")
-score = 0
 bullets = {}
 bullets_generation_tick = 30
-
 
 function love.load()
 
@@ -15,15 +12,11 @@ function love.load()
     music = love.audio.newSource('sounds/music.mp3', 'static')
     player_shoot_sound = love.audio.newSource('sounds/shoot.mp3', 'static')
     music:setLooping(true)
-    --    love.audio.play(music)
+    love.audio.play(music)
 end
 
 function love.draw()
     levelManager:draw()
---    love.graphics.print(score, 5, 5)
---    love.graphics.setColor(1, 1, 1)
-
---    love.graphics.draw(player.image, player.x, (love.graphics.getHeight() * 0.95), 0, 0.3)
 end
 
 function love.keypressed(key, scancode, isrepeat)

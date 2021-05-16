@@ -1,4 +1,3 @@
-require("enemy")
 require("gameLevel")
 
 levelManager = {}
@@ -7,7 +6,7 @@ currentLevel = {}
 
 function levelManager:loadStartLevel()
     isMainMenu = true
-    currentLevel = gameLevel:new{}
+    currentLevel = gameLevel:new {}
 end
 
 function levelManager:loadNextLevel()

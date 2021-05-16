@@ -1,6 +1,10 @@
 require("level")
 gameLevel = level:new()
 
+playerRatio = 0.3
+enemyRatio = 0.3
+endgame = false
+enemyBullets = {}
 function gameLevel:new(o)
     o = o or {}
     setmetatable(o, self)
@@ -32,18 +36,25 @@ function gameLevel:handleInput(key)
 end
 
 function gameLevel:draw()
-    if (#self.enemies_list <= 0) then
-        love.graphics.print("YOU WIN", love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 30)
-    else
-        for it, enemy in pairs(self.enemies_list) do
-            love.graphics.draw(enemy.image, enemy.x, enemy.y, 0, 0.3)
-        end
-        love.graphics.draw(player.image, player.x, player.y, 0, 0.3)
-        for it, bullet in pairs(bullets) do
-            love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
-        end
-        love.graphics.print(#self.enemies_list, 55, 5)
 
+    if (endGame) then
+        love.graphics.print("YOU LOST", love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 30)
+    else
+        if (#self.enemies_list <= 0) then
+            love.graphics.print("YOU WIN", love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 30)
+        else
+            for it, enemy in pairs(self.enemies_list) do
+                love.graphics.draw(enemy.image, enemy.x, enemy.y, 0, enemyRatio)
+            end
+            love.graphics.draw(player.image, player.x, player.y, 0, playerRatio)
+            for it, bullet in pairs(bullets) do
+                love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
+            end
+            for it, bullet in pairs(enemyBullets) do
+                love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 20)
+            end
+            love.graphics.print(#self.enemies_list, 55, 5)
+        end
     end
 end
 
@@ -62,6 +73,15 @@ function gameLevel:tick()
             enemy.y = enemy.y + 3
         end
     end
+    for it, enemy in pairs(self.enemies_list) do
+        number = love.math.random(0, 20000)
+        if (number < 5) then
+            spawnEnemyBullet(enemy)
+        end
+    end
+    for it, bullet in pairs(enemyBullets) do
+        bullet.y = bullet.y + 5
+    end
 end
 
 function gameLevel:verifyCollisions()
@@ -75,28 +95,55 @@ function gameLevel:verifyCollisions()
         end
     end
     for it, enemy in pairs(self.enemies_list) do
-        if (collision(player, enemy)) then
-
-            love.event.quit()
+        if (collisionPE(player, enemy)) then
+            endGame = true
+        end
+    end
+    for it, bullet in pairs(enemyBullets) do
+        if (collisionBP(player, bullet)) then
+            endGame = true
         end
     end
 end
 
 function collisionBE(enemy, bullet)
     bw, bh = enemy.image:getDimensions()
-
+    bw = bw * enemyRatio
+    bh = bh * enemyRatio
     return bullet.x < (enemy.x + bw) and
             enemy.x < (bullet.x) and
             bullet.y < (enemy.y + bh) and
             enemy.y < (bullet.y)
 end
 
-function collision(a, b)
-    aw, ah = a.image:getDimensions()
-    bw, bh = b.image:getDimensions()
+function collisionBP(player, bullet)
+    bw, bh = player.image:getDimensions()
+    bw = bw * playerRatio
+    bh = bh * playerRatio
+    return bullet.x < (player.x + bw) and
+            player.x < (bullet.x) and
+            bullet.y < (player.y + bh) and
+            player.y < (bullet.y)
+end
 
-    return a.x < (b.x + bw) and
-            b.x < (a.x + aw) and
-            a.y < (b.y + bh) and
-            b.y < (a.y + ah)
+function collisionPE(player, enemy)
+    playerw, playerh = player.image:getDimensions()
+    enemyw, enemyh = enemy.image:getDimensions()
+
+    playerw = playerw * playerRatio
+    playerh = playerh * playerRatio
+
+    enemyw = enemyw * enemyRatio
+    enemyh = enemyh * enemyRatio
+    return player.x < (enemy.x + enemyw) and
+            enemy.x < (player.x + playerw) and
+            player.y < (enemy.y + enemyh) and
+            enemy.y < (player.y + playerh)
+end
+
+function spawnEnemyBullet(enemy)
+    bullet = {}
+    bullet.x = enemy.x + 15
+    bullet.y = enemy.y
+    table.insert(enemyBullets, bullet)
 end

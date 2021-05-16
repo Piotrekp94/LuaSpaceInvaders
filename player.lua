@@ -9,7 +9,7 @@ function player:shoot()
         bullet.x = player.x + 15
         bullet.y = 520
         table.insert(bullets, bullet)
-        --        love.audio.play(player_shoot_sound)
+        love.audio.play(player_shoot_sound)
     end
 end
 
